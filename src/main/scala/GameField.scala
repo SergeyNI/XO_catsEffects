@@ -7,6 +7,7 @@ type Cell = Option[User]
 type Line = Array[Cell]
 
 class GameField(length:Int):
+  
   private val cells: Array[Line] =  {
     def newLine():Line = new Array[Cell](this.length)
     val newArray = Array.ofDim[Cell](length, length)
@@ -19,6 +20,7 @@ class GameField(length:Int):
       field(i) = line)
     field
   }
+  def size():Int = length
 
   override def toString(): String =
     val l = cells.length
@@ -43,4 +45,19 @@ class GameField(length:Int):
         cells(row)(column) = Some(user)
         true
       case Some(other_user) => false
-    
+  
+  def getRow(i:Int):Line = cells(i)
+  
+  def getColumn(i:Int):Line = 
+    val column = for {
+      row<-cells
+    } yield row(i)
+    column
+  
+  def getLine(i:Int, isRow:Boolean = true):Line =
+    isRow match
+      case true => getRow(i)
+      case _=> getColumn(i)
+  def getCrossLine(i:Integer):Option[Line]=
+    None
+

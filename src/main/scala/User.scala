@@ -3,26 +3,18 @@ import scala.io.StdIn.readLine
 
 type Desc = "_" | "x" |"o"
 
-trait User(name:String):
-  require(name.length()>3)
+trait User:
+  //require(name.length()>3)
   def desc:Desc
+  def userName():String
 
 
-case class UserX(name:String) extends User(name:String):
+case class UserX(name:String) extends User:
   def desc:Desc = "x"
-// object UserX:
-//   def apply(name:String):Option[UserX] =
-//     try{
-//       val user = UserX(name)
-//       Some(user)
-      
-//     } catch {
-//       case exception: IllegalArgumentException => None
-//     }
-    
-    
-case class UserO(name:String) extends User(name:String):
+  def userName():String = name
+case class UserO(name:String) extends User:
   def desc:Desc = "o"
+  def userName():String = name
 
 class UserBuilder(name:String,classUser:Class[_])
   //def newUser(name:String,classUser:Class[_]): Option[Any]
