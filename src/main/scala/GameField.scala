@@ -58,6 +58,27 @@ class GameField(length:Int):
     isRow match
       case true => getRow(i)
       case _=> getColumn(i)
-  def getCrossLine(i:Integer):Option[Line]=
-    None
+  def getCrossLine(stright:Boolean):Line =
+    val line = new Line(3)
+    
+    stright match
+      case true => 
+        for 
+          i<-length-1 to 0 by -1
+          j<-0 until length
+        do 
+          line(j) =  cells(i)(j)
+        // line(0) = cells(2)(0)
+        // line(1) = cells(1)(1)
+        // line(2) = cells(0)(2)
+      case false =>
+        for i <- 0 until length
+        do line(i) =  cells(i)(i) 
+        // line(0) = cells(0)(0)
+        // line(1) = cells(1)(1)
+        // line(2) = cells(2)(2)
+      line
+
+
+    
 

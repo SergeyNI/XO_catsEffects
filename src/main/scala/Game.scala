@@ -2,10 +2,10 @@ package xo
 
 
 import scala.io.StdIn.readLine
-import scala.compiletime.ops.boolean
+// import scala.compiletime.ops.boolean
 
 class Game(field:GameField,userX:UserX,userO:UserO):
-  // private val field:GameField
+
   def over(numberAction:Int):Boolean = 
     val res = numberAction >1 & (isWiner(userX) | isWiner(userO) | allCellsFilled())
     if res then
@@ -44,28 +44,24 @@ class Game(field:GameField,userX:UserX,userO:UserO):
       case x:Int if x< max =>  rowHasEmptyCell(x) | rowHasEmptyCell(x+1)
       case y:Int if y== max => rowHasEmptyCell(y)
   
-  def rowHasEmptyCell(i:Int):Boolean =
-    val row = field.getLine(i,true)
-    !row.forall(_ != None)
-    // val arEmptyCells = for {
-    //   c<-row
-    //   r = c match
-    //   case None => true
-    //   case _ =>false
-    // } yield r
-    // arEmptyCells.filter(c=> c == true).length > 0
-
+  def rowHasEmptyCell(i:Int):Boolean = field.getLine(i,true).exists(_ == None)
+ 
   def isWiner(user:User):Boolean =
     val i = 0
     val hasRow = UserHasFilledAnyDirectLine(user,i)
     val hasColumn = UserHasFilledAnyDirectLine(user,i,false)
-    val isWiner = hasRow | hasColumn
+    val hasAnyCrossLine = userHasFilledAnyCrossLine(user:User)
+
+    val isWiner = hasRow | hasColumn | hasAnyCrossLine
     if isWiner then
       println(s"${user.userName()} is winner!!")
     isWiner
-
-
-
+  
+  def userHasFilledAnyCrossLine(user:User):Boolean =
+    val cl1 = field.getCrossLine(true)
+    val cl2 = field.getCrossLine(false)
+    cl1.forall(_ == Some(user)) | cl2.forall(_ == Some(user))
+    
   def UserHasFilledAnyDirectLine(user:User,i:Int,isRow:Boolean = true):Boolean =
     val max:Int = field.size()-1
     i match
