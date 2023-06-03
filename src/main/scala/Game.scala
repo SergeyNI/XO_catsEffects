@@ -32,19 +32,24 @@ class Game(field:GameField,userX:UserX,userO:UserO):
         inputUserAction(currentUser)
   
   def allCellsFilled():Boolean =
-    val i = 0
-    val res = !anyRowHasEmptyCell(i)
+    // val i=0
+    // val res = !anyRowHasEmptyCell(i)
+    val res = allRowsHasNoEmptyCell()
     if res then
       println(s"all cells filled but we have no winners")
     res
-  def anyRowHasEmptyCell(i:Int):Boolean =
+  def allRowsHasNoEmptyCell():Boolean =
+    rowHasNotEmptyCell(0)
+  
+  def rowHasNotEmptyCell(i:Int):Boolean = 
     val max:Int = field.size()-1
     val row = field.getLine(i,true)
     i match
-      case x:Int if x< max =>  rowHasEmptyCell(x) | rowHasEmptyCell(x+1)
-      case y:Int if y== max => rowHasEmptyCell(y)
-  
-  def rowHasEmptyCell(i:Int):Boolean = field.getLine(i,true).exists(_ == None)
+      case x:Int if x< max =>  
+        val row = field.getLine(i,true)
+        row.forall(_ != None) & rowHasNotEmptyCell(i+1)
+      case y:Int if y== max => field.getLine(i,true).forall(_ != None)
+
  
   def isWiner(user:User):Boolean =
     val i = 0
@@ -70,5 +75,5 @@ class Game(field:GameField,userX:UserX,userO:UserO):
   
   def userHasFilledDirectLine(user:User,i:Int, isRow:Boolean = true):Boolean =
     val row = field.getLine(i, isRow)
-    row forall (_ == Some(user))
+    row.forall(_ == Some(user))
   

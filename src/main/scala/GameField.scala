@@ -11,10 +11,9 @@ class GameField(length:Int):
   private val cells: Array[Line] =  {
     def newLine():Line = new Array[Cell](this.length)
     val newArray = Array.ofDim[Cell](length, length)
-    // val line:Line = new Array[Cell](this.length)
     val field = new Array[Line](length)
-    
-    Range(0,length-1).inclusive.foreach(i=>
+    val range = 0 until length
+    range foreach(i =>
       val line = newLine()
       Range(0,length-1).inclusive.foreach(i=>line(i) = None)
       field(i) = line)
@@ -38,8 +37,6 @@ class GameField(length:Int):
   
   def fillCell(user:User,row:Int, column:Int):Boolean =
     val value = cells(row)(column)
-    println(s"! $value")
-    println(s"! $row / $column")
     value match
       case None =>
         cells(row)(column) = Some(user)
@@ -65,18 +62,14 @@ class GameField(length:Int):
       case true => 
         for 
           i<-length-1 to 0 by -1
-          j<-0 until length
+          j =length-i-1
         do 
           line(j) =  cells(i)(j)
-        // line(0) = cells(2)(0)
-        // line(1) = cells(1)(1)
-        // line(2) = cells(0)(2)
+      
       case false =>
         for i <- 0 until length
         do line(i) =  cells(i)(i) 
-        // line(0) = cells(0)(0)
-        // line(1) = cells(1)(1)
-        // line(2) = cells(2)(2)
+        
       line
 
 
