@@ -2,9 +2,11 @@ package xo
 
 
 import scala.io.StdIn.readLine
-// import scala.compiletime.ops.boolean
+import cats.effect.{IO}
 
-class Game(field:GameField,userX:UserX,userO:UserO):
+class Game(field:GameField,userX:User,userO:User):
+  val printGameOver:IO[Unit] = IO(println(s"game over"))
+  // val printGameOver = IO(println(s"game over"))
 
   def over(numberAction:Int):Boolean = 
     val res = numberAction >1 & (isWiner(userX) | isWiner(userO) | allCellsFilled())
@@ -22,7 +24,7 @@ class Game(field:GameField,userX:UserX,userO:UserO):
     val column:Int=0
     c.parse(coordinates) match
       case Some(Tuple2(row,column)) => 
-        println(s" $row / $column")
+        // println(s" $row / $column")
         field.fillCell(currentUser,row, column) match
           case false => 
             println("not filled cell. This cell was filled other user.")
@@ -58,8 +60,8 @@ class Game(field:GameField,userX:UserX,userO:UserO):
     val hasAnyCrossLine = userHasFilledAnyCrossLine(user:User)
 
     val isWiner = hasRow | hasColumn | hasAnyCrossLine
-    if isWiner then
-      println(s"${user.userName()} is winner!!")
+    //if isWiner then
+      // println(s"${user.userName()} is winner!!")
     isWiner
   
   def userHasFilledAnyCrossLine(user:User):Boolean =
