@@ -1,7 +1,7 @@
 package xo
 import scala.io.StdIn.readLine
 
-type Description = "_" | "x" |"o"
+type Description = "_" | "X" |"O"
 
 case class User(name:String,desc:Description):
   require(name.length()>3)
