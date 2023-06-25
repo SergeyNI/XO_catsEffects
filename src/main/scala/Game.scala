@@ -54,7 +54,7 @@ class Game(field:GameField,userX:User,userO:User):
   def UserHasFilledAnyDirectLine(user:User,i:Int,isRow:Boolean = true):Boolean =
     val max:Int = field.size()-1
     i match
-      case x:Int if x< max =>  userHasFilledDirectLine(user,x,isRow) | userHasFilledDirectLine(user,x+1,isRow)
+      case x:Int if x< max =>  userHasFilledDirectLine(user,x,isRow) | UserHasFilledAnyDirectLine(user,x+1,isRow)
       case y:Int if y== max => userHasFilledDirectLine(user,y,isRow)
   
   def userHasFilledDirectLine(user:User,i:Int, isRow:Boolean = true):Boolean =

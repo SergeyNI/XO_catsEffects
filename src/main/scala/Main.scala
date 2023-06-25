@@ -1,7 +1,7 @@
 package xo
 import  cats.effect._
 import scala.io.StdIn.readLine
-import cats.instances.unit
+// import cats.instances.unit
 
 object Xo extends IOApp.Simple:
   
