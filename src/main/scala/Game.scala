@@ -12,18 +12,19 @@ class Game(field:GameField,userX:User,userO:User):
     val over = currentUserWinner | allCellsFilled()
     Tuple2(over,currentUserWinner)
 
-  def inputUserAction(currentUser:User):IO[Unit] =
+  def inputUserAction(currentUser:User,again:Boolean = false):IO[Unit] =
+    val strAgain = if again then "Please again " else ""  
     for {
-      coordinatesString <- IO.print(s"${currentUser.name} enter cell coordinates:")*>IO.readLine
-      coordinates <- new CoordinateParser().parse(coordinatesString)
+      coordinatesString <- IO.print(s"$strAgain${currentUser.name} enter cell coordinates:")*>IO.readLine      
+      coordinates <- (new CoordinateParser().parse(coordinatesString))
       _<- coordinates match
-          case Some(Tuple2(row,column)) => 
-            field.fillCell(currentUser,row, column) match
-              case false => 
-                IO.println("cell not filled, because this cell was filled other user.")*>inputUserAction(currentUser)
-              case true => IO.println(field)
-          case _ => 
-            inputUserAction(currentUser)
+        case Some(Tuple2(row,column)) => 
+          field.fillCell(currentUser,row, column) match
+            case false => 
+              IO.println("cell not filled, because this cell was filled other user.")*>inputUserAction(currentUser,true)
+            case true => IO.println(field)
+        case _ => 
+          IO(print("not correct coordinates: "))*>IO((println(coordinatesString)))*>inputUserAction(currentUser,true)
     } yield()
   
   def allCellsFilled():Boolean =  rowHasNotEmptyCell(0)
